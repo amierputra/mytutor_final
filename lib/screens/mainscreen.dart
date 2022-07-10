@@ -45,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
 
     _page1 = SubjectPage(user: widget.user);
-    _page2 = TutorPage();
+    _page2 = TutorPage(user: widget.user);
     _page3 = SubscribePage();
     _page4 = FavouritePage();
     _page5 = ProfilePage(

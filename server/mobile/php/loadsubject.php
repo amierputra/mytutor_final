@@ -6,9 +6,10 @@ if (!isset($_POST)) {
 }
 
 include_once("config.php");
+
 $search = $_POST['search'];
 
-$sqlloadsubject = "SELECT * FROM tbl_subjects WHERE subject_name LIKE '%$search%'";
+$sqlloadsubject = "SELECT * FROM tbl_subjects WHERE subject_name LIKE '%$search%' ORDER BY subject_id DESC";
 $result = $conn->query($sqlloadsubject);
 $number_of_result = $result->num_rows;
 if ($result->num_rows > 0) {

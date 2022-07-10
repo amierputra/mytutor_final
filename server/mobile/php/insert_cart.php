@@ -8,6 +8,7 @@ if (!isset($_POST)) {
 include_once("config.php");
 $subjectid = $_POST['subjectid'];
 $email = $_POST['email'];
+$cartqty = "1";
 $carttotal = 0;
 
 $sqlcheckqty = "SELECT * FROM tbl_subjects WHERE subject_id = '$subjectid'";

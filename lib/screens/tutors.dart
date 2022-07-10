@@ -11,9 +11,13 @@ import 'package:smarttutor/constants.dart';
 import 'package:smarttutor/models/tutor.dart';
 import 'package:smarttutor/models/user.dart';
 import 'package:smarttutor/models/subject.dart';
+import 'package:smarttutor/screens/cartscreen.dart';
+import 'package:smarttutor/screens/login.dart';
+import 'package:smarttutor/screens/register.dart';
 
 class TutorPage extends StatefulWidget {
-  const TutorPage({Key? key}) : super(key: key);
+  final Users user;
+  const TutorPage({Key? key, required this.user}) : super(key: key);
 
   @override
   State<TutorPage> createState() => _TutorPageState();
@@ -44,79 +48,112 @@ class _TutorPageState extends State<TutorPage> {
       //rowcount = 3;
     }
     return Scaffold(
-      body: tutorList.isEmpty
-          ? Center(
-              child: Text(titlecenter,
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold)))
-          : Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text("Tutor",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      children: List.generate(tutorList.length, (index) {
-                        return InkWell(
-                          splashColor: Colors.amber,
-                          onTap: () => {_loadTutorDetails(index)},
-                          onLongPress: () => {},
-                          child: Card(
-                              child: Column(
-                            children: [
-                              Flexible(
-                                flex: 6,
-                                child: CachedNetworkImage(
-                                  width: screenWidth,
-                                  fit: BoxFit.cover,
-                                  imageUrl: CONSTANTS.server +
-                                      "/mytutor/mobile/assets/tutors/" +
-                                      tutorList[index].tutor_id.toString() +
-                                      ".jpg",
-                                  placeholder: (context, url) =>
-                                      const LinearProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+      appBar: AppBar(
+        title: const Text('SmartTutor',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () async {
+                if (widget.user.useremail == "guest@amputra.com") {
+                  _loadOptions();
+                } else {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (content) => CartScreen(
+                                user: widget.user,
+                              )));
+                  _loadMyCart();
+                }
+              },
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Colors.black,
+              ),
+              
+            ),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: tutorList.isEmpty
+            ? Center(
+                child: Text(titlecenter,
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold)))
+            : Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text("Tutor",
+                        style:
+                            TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: (1 / 1.25),
+                        children: List.generate(tutorList.length, (index) {
+                          return InkWell(
+                            splashColor: Colors.amber,
+                            onTap: () => {_loadTutorDetails(index)},
+                            onLongPress: () => {},
+                            child: Card(
+                                child: Column(
+                              children: [
+                                Flexible(
+                                  flex: 6,
+                                  child: CachedNetworkImage(
+                                    width: screenWidth,
+                                    fit: BoxFit.cover,
+                                    imageUrl: CONSTANTS.server +
+                                        "/mytutor/mobile/assets/tutors/" +
+                                        tutorList[index].tutor_id.toString() +
+                                        ".jpg",
+                                    placeholder: (context, url) =>
+                                        const LinearProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
                                 ),
-                              ),
-                              Flexible(
-                                  flex: 4,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                            tutorList[index]
-                                                .tutor_name
-                                                .toString(),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: resWidth * 0.045,
-                                                fontWeight: FontWeight.bold)),
-                                        Text(
-                                          "Phone:" +
+                                Flexible(
+                                    flex: 4,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Text(
                                               tutorList[index]
-                                                  .tutor_phone
+                                                  .tutor_name
                                                   .toString(),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            ],
-                          )),
-                        );
-                      }),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: resWidth * 0.045,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text(
+                                            "Phone:" +
+                                                tutorList[index]
+                                                    .tutor_phone
+                                                    .toString(),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                              ],
+                            )),
+                          );
+                        }),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 
@@ -139,6 +176,39 @@ class _TutorPageState extends State<TutorPage> {
         maintitle = "Profile";
       }
     });
+  }
+
+    _loadOptions() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            title: const Text(
+              "Please select",
+              style: TextStyle(),
+            ),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(onPressed: _onLogin, child: const Text("Login")),
+                ElevatedButton(
+                    onPressed: _onRegister, child: const Text("Register")),
+              ],
+            ),
+          );
+        });
+  }
+
+  void _onLogin() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (content) => const LoginPage()));
+  }
+
+  void _onRegister() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (content) => const RegisterPage()));
   }
 
   void _loadTutors() {
@@ -265,5 +335,30 @@ class _TutorPageState extends State<TutorPage> {
             ],
           );
         });
+  }
+  void _loadMyCart() {
+    if (widget.user.useremail != "guest@amputra.com") {
+      http.post(
+          Uri.parse(
+              CONSTANTS.server + "/mytutor/mobile/php/load_mycartqty.php"),
+          body: {
+            "email": widget.user.useremail.toString(),
+          }).timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          return http.Response(
+              'Error', 408); // Request Timeout response status code
+        },
+      ).then((response) {
+        print(response.body);
+        var jsondata = jsonDecode(response.body);
+        if (response.statusCode == 200 && jsondata['status'] == 'success') {
+          print(jsondata['data']['carttotal'].toString());
+          setState(() {
+            widget.user.cart = jsondata['data']['carttotal'].toString();
+          });
+        }
+      });
+    }
   }
 }

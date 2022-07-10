@@ -62,121 +62,127 @@ class _SubjectPageState extends State<SubjectPage> {
               _loadSearchDialog();
             },
           ),
-          TextButton.icon(
-            onPressed: () async {
-              if (widget.user.useremail == "guest@amputra.com") {
-                _loadOptions();
-              } else {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (content) => CartScreen(
-                              user: widget.user,
-                            )));
-                _loadSubjects(search);
-                _loadMyCart();
-              }
-            },
-            icon: const Icon(
-              Icons.shopping_cart,
-              color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton.icon(
+              onPressed: () async {
+                if (widget.user.useremail == "guest@amputra.com") {
+                  _loadOptions();
+                } else {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (content) => CartScreen(
+                                user: widget.user,
+                              )));
+                  _loadSubjects(search);
+                  _loadMyCart();
+                }
+              },
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Colors.black,
+              ),
+              label: Text(widget.user.cart.toString(),
+                  style: const TextStyle(color: Colors.black)),
             ),
-            label: Text(widget.user.cart.toString(),
-                style: const TextStyle(color: Colors.black)),
           ),
         ],
       ),
-      body: subjectList.isEmpty
-          ? Center(
-              child: Text(titlecenter,
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold)),
-            )
-          : Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 18, 0, 10),
-                  child: Text("Subject",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      childAspectRatio: (1 / 1.25),
-                      children: List.generate(subjectList.length, (index) {
-                        return Card(
-                            child: Column(
-                          children: [
-                            Flexible(
-                              flex: 6,
-                              child: CachedNetworkImage(
-                                imageUrl: CONSTANTS.server +
-                                    "/mytutor/mobile/assets/courses/" +
-                                    subjectList[index].subject_id.toString() +
-                                    ".png",
-                                fit: BoxFit.cover,
-                                width: screenWidth,
-                                placeholder: (context, url) =>
-                                    const LinearProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                              ),
-                            ),
-                            Flexible(
-                              flex: 6,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: subjectList.isEmpty
+            ? Center(
+                child: Text(titlecenter,
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold)),
+              )
+            : Column(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 18, 0, 10),
+                    child: Text("Subject",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: (1 / 1.25),
+                        children: List.generate(subjectList.length, (index) {
+                          return Card(
                               child: Column(
-                                children: [
-                                  Expanded(
-                                    flex: 7,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          subjectList[index]
-                                              .subject_name
-                                              .toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: resWidth * 0.045,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text("RM " +
-                                            double.parse(subjectList[index]
-                                                    .subject_price
-                                                    .toString())
-                                                .toStringAsFixed(2)),
-                                        Text("Rating: " +
-                                            subjectList[index]
-                                                .subject_rating
-                                                .toString()),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                      flex: 4,
-                                      child: IconButton(
-                                          onPressed: () {
-                                            _addtocartDialog(index);
-                                          },
-                                          icon:
-                                              const Icon(Icons.shopping_cart))),
-                                ],
+                            children: [
+                              Flexible(
+                                flex: 6,
+                                child: CachedNetworkImage(
+                                  imageUrl: CONSTANTS.server +
+                                      "/mytutor/mobile/assets/courses/" +
+                                      subjectList[index].subject_id.toString() +
+                                      ".png",
+                                  fit: BoxFit.cover,
+                                  width: screenWidth,
+                                  placeholder: (context, url) =>
+                                      const LinearProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
                               ),
-                            ),
-                          ],
-                        ));
-                      }),
+                              Flexible(
+                                flex: 6,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      flex: 7,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            subjectList[index]
+                                                .subject_name
+                                                .toString(),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: resWidth * 0.045,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text("RM " +
+                                              double.parse(subjectList[index]
+                                                      .subject_price
+                                                      .toString())
+                                                  .toStringAsFixed(2)),
+                                          Text("Rating: " +
+                                              subjectList[index]
+                                                  .subject_rating
+                                                  .toString()),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                        flex: 4,
+                                        child: IconButton(
+                                            onPressed: () {
+                                              _addtocartDialog(index);
+                                            },
+                                            icon: const Icon(
+                                                Icons.shopping_cart))),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ));
+                        }),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 
@@ -284,8 +290,6 @@ class _SubjectPageState extends State<SubjectPage> {
         builder: (BuildContext context) {
           // return object of type Dialog
           return AlertDialog(
-            insetPadding: const EdgeInsets.all(70),
-            buttonPadding: const EdgeInsets.all(0),
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
             title: const Center(
@@ -318,8 +322,12 @@ class _SubjectPageState extends State<SubjectPage> {
                           Navigator.of(context).pop();
                         },
                         child: Container(
-                          alignment: Alignment.center,
-                          color: Colors.lime,
+                          alignment: Alignment.center,                          
+                          decoration: const BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),),
+                          ),
                           child: const Text(
                             "Yes",
                             style: TextStyle(
@@ -338,13 +346,17 @@ class _SubjectPageState extends State<SubjectPage> {
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          color: Colors.white,
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(10),),
+                          ),
                           child: const Text(
                             "No",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
-                              color: Colors.lime,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -422,7 +434,7 @@ class _SubjectPageState extends State<SubjectPage> {
   }
 
   void _loadMyCart() {
-    if (widget.user.useremail != "guest@slumberjer.com") {
+    if (widget.user.useremail != "guest@amputra.com") {
       http.post(
           Uri.parse(
               CONSTANTS.server + "/mytutor/mobile/php/load_mycartqty.php"),
