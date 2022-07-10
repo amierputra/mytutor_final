@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
 
-    _page1 = SubjectPage();
+    _page1 = SubjectPage(user: widget.user);
     _page2 = TutorPage();
     _page3 = SubscribePage();
     _page4 = FavouritePage();
@@ -89,11 +89,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'SmartTutor',style: TextStyle(fontWeight: FontWeight.bold)
-        ),
-      ),
       body: _currentPage,
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
