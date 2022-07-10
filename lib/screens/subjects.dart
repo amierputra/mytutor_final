@@ -109,7 +109,7 @@ class _SubjectPageState extends State<SubjectPage> {
                     child: GestureDetector(
                       child: GridView.count(
                         crossAxisCount: 2,
-                        childAspectRatio: (1 / 1.25),
+                        childAspectRatio: (1 / 1.3),
                         children: List.generate(subjectList.length, (index) {
                           return Card(
                               child: Column(
